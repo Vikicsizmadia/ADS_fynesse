@@ -147,6 +147,25 @@ def get_list_of_postcodes_near_coordinates(conn, latitude, longitude, year, prop
         postcode_list.append(postcode[0])
     return postcode_list
 
+def get_housedata_near_coordinates(conn, latitude, longitude, bounding, year, property_type):
+    north = latitude + bounding/2
+    south = latitude - bounding/2
+    west = longitude - bounding #need more longitude to match the latitude in kilometers
+    east = longitude + bounding
+    
+    with conn.cursor() as cur:
+        cur.execute(f"SELECT * \
+                    FROM (SELECT * FROM postcode_data WHERE postcode_data.lattitude < {north} AND postcode_data.lattitude > {south} \
+                            AND postcode_data.longitude < {east} AND postcode_data.longitude > {west}) AS post \
+                    INNER JOIN \
+                            (SELECT * FROM pp_data WHERE (YEAR(pp_data.date_of_transfer) = {year}) AND (pp_data.property_type = '{property_type}') \
+                            AND (pp_data.price IS NOT NULL)) AS pp \
+                    ON post.postcode = pp.postcode")
+    
+    conn.commit()
+    rows = cur.fetchall()
+    return rows
+
 
 """
 def data():
