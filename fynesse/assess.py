@@ -8,6 +8,7 @@ import bokeh
 import matplotlib.pyplot as plt
 import sklearn.decomposition as decomposition
 import sklearn.feature_extraction"""
+import pymysql
 
 def create_connection(user, password, host, database, port=3306):
     """ Create a database connection to the MariaDB database
