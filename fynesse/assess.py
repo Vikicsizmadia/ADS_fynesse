@@ -66,6 +66,36 @@ def plot_pois(latitude, longitude, bounding, list_of_tags):
 
   plt.tight_layout()
 
+def plot_houseprices_heatmap(conn, latitude, longitude, bounding, year, property_type):
+    housedata = get_housedata_near_coordinates(conn, latitude, longitude, bounding, year, property_type)
+
+    north = latitude + bounding/2
+    south = latitude - bounding/2
+    west = longitude - bounding
+    east = longitude + bounding
+
+    price_list = []
+    latitude_list = []
+    longitude_list = []
+    for house in housedata:
+        price_list.append(house[1])
+        latitude_list.append(house[11])
+        longitude_list.append(house[12])
+
+    fig, ax = plt.subplots(figsize=plot.big_figsize)
+    graph = ox.graph_from_bbox(north, south, east, west)
+    nodes, edges = ox.graph_to_gdfs(graph)
+
+    edges.plot(ax=ax, linewidth=1, edgecolor="dimgray")
+
+    ax.set_xlim([west, east])
+    ax.set_ylim([south, north])
+    ax.set_xlabel("longitude")
+    ax.set_ylabel("latitude")
+
+    plt.tricontourf(longitude_list, latitude_list, price_list)
+
+
 def get_near_houses_avg_price(conn, north, south, west, east, property_type, date):
   with conn.cursor() as cur:
     cur.execute(f"SELECT AVG(pp.price) \
