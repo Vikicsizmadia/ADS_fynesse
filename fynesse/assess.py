@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 import sklearn.decomposition as decomposition
 import sklearn.feature_extraction"""
 import pymysql
+import matplotlib.pyplot as plt
+import osmnx as ox
+import mlai.plot as plot
 
 def create_connection(user, password, host, database, port=3306):
     """ Create a database connection to the MariaDB database
@@ -32,6 +35,36 @@ def create_connection(user, password, host, database, port=3306):
     except Exception as e:
         print(f"Error connecting to the MariaDB Server: {e}")
     return conn
+
+def plot_pois(latitude, longitude, bounding, list_of_tags):
+  north = latitude + bounding/2
+  south = latitude - bounding/2
+  west = longitude - bounding
+  east = longitude + bounding
+
+  # Retrieve POIs
+  tags = {}
+  for tag in list_of_tags:
+    tags[tag] = True
+
+  graph = ox.graph_from_bbox(north, south, east, west)
+  pois = ox.geometries_from_bbox(north, south, east, west, tags)
+  nodes, edges = ox.graph_to_gdfs(graph)
+
+  fig, ax = plt.subplots(figsize=plot.big_figsize)
+
+  # Plot street edges
+  edges.plot(ax=ax, linewidth=1, edgecolor="dimgray")
+
+  ax.set_xlim([west, east])
+  ax.set_ylim([south, north])
+  ax.set_xlabel("longitude")
+  ax.set_ylabel("latitude")
+
+  for tag in list_of_tags:
+    pois[(getattr(pois, tag)).notnull()].plot(ax=ax, color="blue", alpha=1, markersize=50)
+
+  plt.tight_layout()
 
 def get_near_houses_avg_price(conn, north, south, west, east, property_type, date):
   with conn.cursor() as cur:
