@@ -154,7 +154,8 @@ def get_housedata_near_coordinates(conn, latitude, longitude, bounding, year, pr
     east = longitude + bounding
     
     with conn.cursor() as cur:
-        cur.execute(f"SELECT * \
+        cur.execute(f"SELECT pp.transaction_unique_identifier, pp.price, pp.date_of_transfer, pp.postcode, pp.property_type, pp.new_build_flag, \
+                          pp.locality, pp.town_city, pp.district, pp.county, post.country, post.lattitude, post.longitude, pp.db_id \
                     FROM (SELECT * FROM postcode_data WHERE postcode_data.lattitude < {north} AND postcode_data.lattitude > {south} \
                             AND postcode_data.longitude < {east} AND postcode_data.longitude > {west}) AS post \
                     INNER JOIN \
