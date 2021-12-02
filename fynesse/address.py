@@ -121,7 +121,7 @@ def train_model(conn, year, property_type, near_houses, bounding):
   return results_basis
 
 
-def predict_price(conn, latitude, longitude, year, property_type, train_bounding, data_bounding): #latitude, longitude format: float; year format: 'yyyy'; property_type format: 'type'
+def predict_price(conn, latitude, longitude, year, property_type, train_bounding=0.02, data_bounding=0.02): #latitude, longitude format: float; year format: 'yyyy'; property_type format: 'type'
   
   near_houses = assess.get_housedata_near_coordinates(conn, latitude, longitude, data_bounding, year, property_type)
 
