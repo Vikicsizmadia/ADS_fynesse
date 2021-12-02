@@ -96,13 +96,13 @@ def plot_houseprices_heatmap(conn, latitude, longitude, bounding, year, property
     plt.tricontourf(longitude_list, latitude_list, price_list)
 
 
-def get_near_houses_avg_price(conn, north, south, west, east, property_type, date):
+def get_near_houses_avg_price(conn, north, south, west, east, property_type, year):
   with conn.cursor() as cur:
     cur.execute(f"SELECT AVG(pp.price) \
                   FROM (SELECT * FROM postcode_data WHERE postcode_data.lattitude < {north} AND postcode_data.lattitude > {south} \
                         AND postcode_data.longitude < {east} AND postcode_data.longitude > {west}) AS post \
                   INNER JOIN \
-                        (SELECT * FROM pp_data WHERE (YEAR(pp_data.date_of_transfer) = {date}) AND (pp_data.property_type = '{property_type}')) AS pp \
+                        (SELECT * FROM pp_data WHERE (YEAR(pp_data.date_of_transfer) = {year}) AND (pp_data.property_type = '{property_type}')) AS pp \
                   ON post.postcode = pp.postcode")
 
     conn.commit()
@@ -121,7 +121,7 @@ def get_price(conn, postcode, year, property_type):
     rows = cur.fetchall()
     return rows
 
-def get_data(conn, postcode, year, property_type):
+def get_data(conn, postcode):
   with conn.cursor() as cur:
     cur.execute(f"SELECT * \
                   FROM pp_data \

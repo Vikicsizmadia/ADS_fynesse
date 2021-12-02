@@ -1,14 +1,13 @@
-# Fynesse Template
+# ADS_fynesse
 
-This repo provides a python template repo for doing data analysis according to the Fynesse framework.
+This repo includes files and functions to do house price predictions by doing data analysis according to the Fynesse framework.
 
-One challenge for data science and data science processes is that they do not always accommodate the real-time and evolving nature of data science advice as required, for example in pandemic response or in managing an international supply chain. The Fynesse paradigm is inspired by experience in operational data science both in the Amazon supply chain and in the UK Covid-19 pandemic response.
-
-The Fynesse paradigm considers three aspects to data analysis, Access, Assess, Address. 
+The Fynesse paradigm considers three aspects to data analysis, Access, Assess, Address.
 
 ## Access
 
-Gaining access to the data, including overcoming availability challenges (data is distributed across architectures, called from an obscure API, written in log books) as well as legal rights (for example intellectual property rights) and individual privacy rights (such as those provided by the GDPR).
+Code that corresponds to the access part of the data analysis are in the .\fynesse\access.py file
+
 
 It seems a great challenge to automate all the different aspects of the process of data access, but this challenge is underway already through the process of what is commonly called *digital transformation*. The process of digital transformation takes data away from physical log books and into digital devices. But that transformation process itself comes with challenges. 
 
