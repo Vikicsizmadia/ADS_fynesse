@@ -9,7 +9,28 @@ import matplotlib.pyplot as plt
 import sklearn.decomposition as decomposition
 import sklearn.feature_extraction"""
 
-"""Place commands in this file to assess the data you have downloaded. How are missing values encoded, how are outliers encoded? What do columns represent, makes rure they are correctly labeled. How is the data indexed. Crete visualisation routines to assess the data (e.g. in bokeh). Ensure that date formats are correct and correctly timezoned."""
+def create_connection(user, password, host, database, port=3306):
+    """ Create a database connection to the MariaDB database
+        specified by the host url and database name.
+    :param user: username
+    :param password: password
+    :param host: host url
+    :param database: database
+    :param port: port number
+    :return: Connection object or None
+    """
+    conn = None
+    try:
+        conn = pymysql.connect(user=user,
+                               passwd=password,
+                               host=host,
+                               port=port,
+                               local_infile=1,
+                               db=database
+                               )
+    except Exception as e:
+        print(f"Error connecting to the MariaDB Server: {e}")
+    return conn
 
 def get_near_houses_avg_price(conn, north, south, west, east, property_type, date):
   with conn.cursor() as cur:
