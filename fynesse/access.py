@@ -1,11 +1,7 @@
 from .config import *
 
-"""These are the types of import we might expect in this file
-import httplib2
-import oauth2
-import mongodb
-import sqlite"""
-
+#%%capture
+#%load_ext sql
 
 """
 %sql mariadb+pymysql://$username:$password@$url?local_infile=1

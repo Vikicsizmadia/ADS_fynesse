@@ -8,19 +8,42 @@ The Fynesse paradigm considers three aspects to data analysis, Access, Assess, A
 
 Code that corresponds to the access part of the data analysis are in the .\fynesse\access.py file
 
+I just collected the main sql queries I used for accessing the data, namely:
 
-It seems a great challenge to automate all the different aspects of the process of data access, but this challenge is underway already through the process of what is commonly called *digital transformation*. The process of digital transformation takes data away from physical log books and into digital devices. But that transformation process itself comes with challenges. 
-
-Legal complications around data are still a major barrier though. In the EU and the US database schema and indices are subject to copyright law. Companies making data available often require license fees. As many data sources are combined, the composite effect of the different license agreements often makes the legal challenges insurmountable. This was a common challenge in the pandemic, where academics who were capable of dealing with complex data predictions were excluded from data access due to challenges around licensing. A nice counter example was the work led by Nuria Oliver in Spain who after a call to arms in a national newspaper  was able to bring the ecosystem together around mobility data.
-
-However, even when organisation is fully digital, and license issues are overcome, there are issues around how the data is managed stored, accessed. The discoverability of the data and the recording of its provenance are too often neglected in the process of digtial transformation. Further, once an organisation has gone through digital transformation, they begin making predictions around the data. These predictions are data themselves, and their presence in the data ecosystem needs recording. Automating this portion requires structured thinking around our data ecosystems.
+- Maing the connection to the MariaDB server
+- Making the database
+- Creating the pp_data table
+- Populating the pp_data table with the downloaded dataframe
+- Creating the postcode_data table
+- Populating the postcode_data table with the downloaded dataframe
 
 ## Assess
 
-Understanding what is in the data. Is it what it's purported to be, how are missing values encoded, what are the outliers, what does each variable represent and how is it encoded.
+Code that corresponds to the assess part of the data analysis are in the .\fynesse\assess.py file
 
-Data that is accessible can be imported (via APIs or database calls or reading a CSV) into the machine and work can be done understanding the nature of the data. The important thing to say about the assess aspect is that it only includes things you can do *without* the question in mind. This runs counter to many ideas about how we do data analytics. The history of statistics was that we think of the question *before* we collect data. But that was because data was expensive, and it needed to be excplicitly collected. The same mantra is true today of *surveillance data*. But the new challenge is around *happenstance data*, data that is cheaply available but may be of poor quality. The nature of the data needs to be understood before its integrated into analysis. Unfortunately, because the work is conflated with other aspects, decisions are sometimes made during assessment (for example approaches to imputing missing values) which may be useful in one context, but are useless in others. So the aim in *assess* is to only do work that is repeatable, and make that work available to others who may also want to use the data.
+This part contains functions that can be used for answering any types of questions and not specific to the price prediction question I addressed later.
+
+- The ```create_connection``` function creates the connection to the database we created in the Access part.
+- The ```plot_pois``` function plots points of interests provided in a list.
+- The ```plot_houseprices_heatmap``` function plots a heatmap of the houseprices in the specified area, year and property type.
+- The ```get_near_houses_avg_price``` function gets the average price of houses in the specified area, year and property type.
+- The ```get_price``` function gets the price of a house with the provided postcode, year, propetry_type.
+- The ```get_data``` function gets rows from the pp_data table where the postcode is equal to the provided postcode.
+- The ```get_latitude_longitude``` function gets the corresponding latitude and longitude values of a postcode.
+- The ```get_listOf_postcodes``` function gets the list of postcodes of houses where the year and property_type is provided.
+- The ```get_list_of_postcodes_near_coordinates``` function similar as the above, but narrows down the postcodes to only those that are within a bounding box of the provided coordinates.
+- The ```get_housedata_near_coordinates``` same function as above, but not only gives back a list of postcodes, but gives back the whole rows of pp_data, where the values match with the inputs.
+
 
 ## Address
 
-The final aspect of the process is to *address* the question. We'll spend the least time on this aspect here, because it's the one that is most widely formally taught and the one that most researchers are familiar with. In statistics, this might involve some confirmatory data analysis. In machine learning it may involve designing a predictive model. In many domains it will involve figuring out how best to visualise the data to present it to those who need to make the decisions. That could involve a dashboard, a plot or even summarisation in an Excel spreadsheet.
+Code that corresponds to the address part of the data analysis are in the .\fynesse\address.py file
+
+This file contains functions of training a model and predicting house prices with that model.
+
+The following 4 functions can be found in the file:
+
+- The ```train_model``` function trains an OLS model on different number of points of interests and the average prices of the surrounding houses.
+- The ```predict_price``` function uses the model trained by the ```train_model``` function, and predicts a price for a given latitude and longitude.
+- The ```train2_model``` function trains an OLS model with the same features as the ```train_model```, but trains the model on a given list of postcodes of houses.
+- The ```predict_prices``` function uses the model trained by the ```train2_model``` function, and predicts prices for a list of postcodes, and plots the predictions and the real prices for comparison.

@@ -2,12 +2,6 @@ from .config import *
 
 from . import access
 
-"""These are the types of import we might expect in this file
-import pandas
-import bokeh
-import matplotlib.pyplot as plt
-import sklearn.decomposition as decomposition
-import sklearn.feature_extraction"""
 import pymysql
 import matplotlib.pyplot as plt
 import osmnx as ox
@@ -196,23 +190,3 @@ def get_housedata_near_coordinates(conn, latitude, longitude, bounding, year, pr
     conn.commit()
     rows = cur.fetchall()
     return rows
-
-
-"""
-def data():
-    #Load the data from access and ensure missing values are correctly encoded as well as indices correct, column names informative, date and times correctly formatted. Return a structured data structure such as a data frame.
-    df = access.data()
-    raise NotImplementedError
-
-def query(data):
-    #Request user input for some aspect of the data.
-    raise NotImplementedError
-
-def view(data):
-    #Provide a view of the data that allows the user to verify some aspect of its quality.
-    raise NotImplementedError
-
-def labelled(data):
-    #Provide a labelled set of data ready for supervised learning.
-    raise NotImplementedError
-"""
